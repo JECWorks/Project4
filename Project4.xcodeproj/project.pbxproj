@@ -22,6 +22,7 @@
 		A992E5CA2C055A2C00CC9B17 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A992E5CC2C055A2C00CC9B17 /* Project4.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Project4.entitlements; sourceTree = "<group>"; };
 		A9F6D1042C055F03008D5A41 /* WindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowController.swift; sourceTree = "<group>"; };
+		A9F6D1062C057709008D5A41 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +55,7 @@
 		A992E5C22C055A2B00CC9B17 /* Project4 */ = {
 			isa = PBXGroup;
 			children = (
+				A9F6D1062C057709008D5A41 /* Info.plist */,
 				A992E5C32C055A2B00CC9B17 /* AppDelegate.swift */,
 				A992E5C52C055A2B00CC9B17 /* ViewController.swift */,
 				A992E5C72C055A2C00CC9B17 /* Assets.xcassets */,
@@ -284,6 +286,7 @@
 				DEVELOPMENT_TEAM = WHKA3Q9GPE;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Project4/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
@@ -311,6 +314,7 @@
 				DEVELOPMENT_TEAM = WHKA3Q9GPE;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Project4/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
