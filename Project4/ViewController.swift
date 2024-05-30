@@ -8,7 +8,7 @@
 import Cocoa
 import WebKit
 
-class ViewController: NSViewController, WKNavigationDelegate, NSGestureRecognizerDelegate, NSTouchBarDelegate {
+class ViewController: NSViewController, WKNavigationDelegate, NSGestureRecognizerDelegate, NSTouchBarDelegate, NSSharingServicePickerTouchBarItemDelegate {
     
     var rows: NSStackView!
     var selectedWebView: WKWebView!
@@ -192,9 +192,47 @@ class ViewController: NSViewController, WKNavigationDelegate, NSGestureRecognize
         switch identifier {
         case .enterAddress:
             let button = NSButton(title: "Enter a URL", target: self, action: #selector(selectAddressEntry))
+            button.setContentHuggingPriority(NSLayoutConstraint.Priority(10), for: .horizontal)
             let customTouchBarItem = NSCustomTouchBarItem(identifier: identifier)
             customTouchBarItem.view = button
             return customTouchBarItem
+        
+        case NSTouchBarItem.Identifier.navigation:
+            let back = NSImage(named: NSImage.touchBarGoBackTemplateName)!
+            let forward = NSImage(named: NSImage.touchBarGoForwardTemplateName)!
+            let segmentedControl = NSSegmentedControl(images: [back, forward], trackingMode: .momentary, target: self, action: #selector(navigationClicked))
+            
+            let customTouchBarItem = NSCustomTouchBarItem(identifier: identifier)
+            customTouchBarItem.view = segmentedControl
+            return customTouchBarItem
+        
+        case NSTouchBarItem.Identifier.sharingPicker:
+            let picker = NSSharingServicePickerTouchBarItem(identifier: identifier)
+            picker.delegate = self
+            return picker
+            
+        case NSTouchBarItem.Identifier.adjustRows:
+            let control = NSSegmentedControl(labels: ["+ Row", "- Row"], trackingMode: .momentaryAccelerator, target: self, action: #selector(adjustRows))
+            let customTouchBarItem = NSCustomTouchBarItem(identifier: identifier)
+            customTouchBarItem.customizationLabel = "Rows"
+            customTouchBarItem.view = control
+            return customTouchBarItem
+
+        case NSTouchBarItem.Identifier.adjustCols:
+            let control = NSSegmentedControl(labels: ["+ Col", "- Col"], trackingMode: .momentaryAccelerator, target: self, action: #selector(adjustColumns))
+            let customTouchBarItem = NSCustomTouchBarItem(identifier: identifier)
+            customTouchBarItem.customizationLabel = "Cols"
+            customTouchBarItem.view = control
+            return customTouchBarItem
+            
+        case NSTouchBarItem.Identifier.adjustGrid:
+            let popover = NSPopoverTouchBarItem(identifier: identifier)
+            popover.collapsedRepresentationLabel = "Grid"
+            popover.customizationLabel = "Adjust Grid"
+            popover.popoverTouchBar = NSTouchBar()
+            popover.popoverTouchBar.delegate = self
+            popover.popoverTouchBar.defaultItemIdentifiers = [.adjustRows, .adjustCols]
+            return popover
             
         default:
             return nil
@@ -224,6 +262,7 @@ class ViewController: NSViewController, WKNavigationDelegate, NSGestureRecognize
         touchBar.customizationRequiredItemIdentifiers = [.enterAddress]
         
         return touchBar
+        
     }
     
     @objc func selectAddressEntry() {
@@ -231,6 +270,14 @@ class ViewController: NSViewController, WKNavigationDelegate, NSGestureRecognize
             windowController.window?.makeFirstResponder(windowController.addressEntry)
         }
     }
+    
+    @available(OSX 10.13.2, *)
+    func items(for pickerTouchBarItem: NSSharingServicePickerTouchBarItem) -> [Any] {
+        guard let webView = selectedWebView else {return []}
+        guard let url = webView.url?.absoluteString else {return []}
+        return [url]
+    }
+    
 }
 
 extension NSTouchBarItem.Identifier {
