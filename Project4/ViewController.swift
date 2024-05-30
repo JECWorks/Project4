@@ -8,7 +8,7 @@
 import Cocoa
 import WebKit
 
-class ViewController: NSViewController, WKNavigationDelegate, NSGestureRecognizerDelegate {
+class ViewController: NSViewController, WKNavigationDelegate, NSGestureRecognizerDelegate, NSTouchBarDelegate {
     
     var rows: NSStackView!
     var selectedWebView: WKWebView!
@@ -187,4 +187,46 @@ class ViewController: NSViewController, WKNavigationDelegate, NSGestureRecognize
         }
     }
     
+    @available(OSX 10.12.2, *)
+    func touchBar(_ touchBar: NSTouchBar, makeItemForIdentifier identifier: NSTouchBarItem.Identifier) -> NSTouchBarItem? {
+        switch identifier {
+        default:
+            return nil
+        }
+    }
+    
+    @available(OSX 10.12.2, *)
+    override func makeTouchBar() -> NSTouchBar? {
+        // enable the Customize Touch Bar menu item
+        NSApp.isAutomaticCustomizeTouchBarMenuItemEnabled = true
+        
+        // create a Touch Bar with a unique identifier, making ViewController its delegate
+        let touchBar = NSTouchBar()
+        touchBar.customizationIdentifier = NSTouchBar.CustomizationIdentifier("com.JECWorks.project4")
+        touchBar.delegate = self
+        
+        // set up some meaningful defaults
+        touchBar.defaultItemIdentifiers = [.navigation, .adjustGrid, .enterAddress, .sharingPicker]
+        
+        // make the address entry button sit in the center of the bar
+        touchBar.principalItemIdentifier = .enterAddress
+        
+        // allow the user to customize these four controls
+        touchBar.customizationAllowedItemIdentifiers = [.sharingPicker, .adjustGrid, .adjustCols, .adjustRows]
+        
+        // but don't let them take off the URL entry button
+        touchBar.customizationRequiredItemIdentifiers = [.enterAddress]
+        
+        return touchBar
+    }
+    
+}
+
+extension NSTouchBarItem.Identifier {
+    static let navigation = NSTouchBarItem.Identifier("com.JECWorks.project4.navigation")
+    static let enterAddress = NSTouchBarItem.Identifier("com.JECWorks.project4.enterAddress")
+    static let sharingPicker = NSTouchBarItem.Identifier("com.JECWorks.project4.sharingPicker")
+    static let adjustGrid = NSTouchBarItem.Identifier("com.JECWorks.project4.adjustGrid")
+    static let adjustRows = NSTouchBarItem.Identifier("com.JECWorks.project4.adjustRows")
+    static let adjustCols = NSTouchBarItem.Identifier("com.JECWorks.project4.adjustCols")
 }
